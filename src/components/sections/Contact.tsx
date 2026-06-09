@@ -9,26 +9,24 @@ import { Button } from "@/components/ui/Button";
 import { AsteriskMark } from "@/components/ui/AsteriskMark";
 import { Phone, Mail, MapPin, Send } from "lucide-react";
 import { BRAND_COLORS } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
-const PROJECT_TYPES = [
-  "Cold Storage Warehouse",
-  "Clean Room / Pharmaceutical",
-  "Industrial Roof & Wall",
-  "Secret Fix Facade",
-  "Mixed-Use Development",
-  "Export / Distribution",
-  "Other",
-];
+const CONTACT_ICONS = [Phone, Mail, MapPin];
+const CONTACT_VALUES = ["+98 21 XXXX XXXX", "projects@asehpanel.com", "Tehran, Islamic Republic of Iran"];
+const CONTACT_COLORS = [BRAND_COLORS.green, BRAND_COLORS.blue, BRAND_COLORS.purple];
 
-const CONTACT_ITEMS = [
-  { icon: Phone, label: "Sales & Inquiry",  value: "+98 21 XXXX XXXX",  color: BRAND_COLORS.green  },
-  { icon: Mail,  label: "Engineering",      value: "projects@asehpanel.com", color: BRAND_COLORS.blue },
-  { icon: MapPin,label: "Headquarters",     value: "Tehran, Islamic Republic of Iran", color: BRAND_COLORS.purple },
+const MAP_DOTS = [
+  { top: "30%", left: "48%", color: BRAND_COLORS.green,  label: "IR"  },
+  { top: "25%", left: "52%", color: BRAND_COLORS.blue,   label: "AE"  },
+  { top: "28%", left: "42%", color: BRAND_COLORS.purple, label: "TR"  },
+  { top: "20%", left: "55%", color: BRAND_COLORS.ice,    label: "KZ"  },
+  { top: "22%", left: "46%", color: BRAND_COLORS.green,  label: "DE"  },
 ];
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", company: "", type: "", message: "", email: "" });
   const [sent, setSent] = useState(false);
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,50 +45,37 @@ export function Contact() {
 
           {/* Left: Info */}
           <AnimateIn>
-            <SectionLabel text="Contact" accent="blue" className="mb-5" />
+            <SectionLabel text={t.contact.label} accent="blue" className="mb-5" />
             <BrandBar width="120px" height={3} className="mb-8" />
             <h2 className="text-display-xl font-black text-white leading-tight mb-6">
-              Start your<br />
-              <span className="text-white/30">project.</span>
+              {t.contact.headline1}<br />
+              <span className="text-white/30">{t.contact.headline2}</span>
             </h2>
-            <p className="text-base text-steel leading-relaxed mb-12 max-w-md">
-              From specification to delivery — our engineering team is available to evaluate your project
-              requirements, recommend the right system, and provide full technical support.
-            </p>
+            <p className="text-base text-steel leading-relaxed mb-12 max-w-md">{t.contact.body}</p>
 
-            {/* Contact items */}
             <div className="flex flex-col gap-6 mb-12">
-              {CONTACT_ITEMS.map((item) => {
-                const Icon = item.icon;
+              {t.contact.contactItems.map((item, i) => {
+                const Icon = CONTACT_ICONS[i];
+                const color = CONTACT_COLORS[i];
                 return (
                   <div key={item.label} className="flex items-center gap-4">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ background: `${item.color}14`, border: `1px solid ${item.color}28` }}
-                    >
-                      <Icon size={15} color={item.color} />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${color}14`, border: `1px solid ${color}28` }}>
+                      <Icon size={15} color={color} />
                     </div>
                     <div>
                       <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted mb-0.5">{item.label}</div>
-                      <div className="text-sm font-medium text-frost">{item.value}</div>
+                      <div className="text-sm font-medium text-frost">{CONTACT_VALUES[i]}</div>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Mini world map placeholder */}
             <div className="rounded-2xl bg-surface/40 border border-white/[0.05] p-6 relative overflow-hidden">
-              <div className="font-mono text-[0.58rem] uppercase tracking-widest text-muted mb-4">Export coverage</div>
+              <div className="font-mono text-[0.58rem] uppercase tracking-widest text-muted mb-4">{t.contact.exportLabel}</div>
               <div className="h-24 relative">
-                {/* Simplified map dots */}
-                {[
-                  { top: "30%", left: "48%", color: BRAND_COLORS.green,  label: "IR"  },
-                  { top: "25%", left: "52%", color: BRAND_COLORS.blue,   label: "AE"  },
-                  { top: "28%", left: "42%", color: BRAND_COLORS.purple, label: "TR"  },
-                  { top: "20%", left: "55%", color: BRAND_COLORS.ice,    label: "KZ"  },
-                  { top: "22%", left: "46%", color: BRAND_COLORS.green,  label: "DE"  },
-                ].map((dot) => (
+                {MAP_DOTS.map((dot) => (
                   <div key={dot.label} className="absolute flex flex-col items-center gap-1" style={{ top: dot.top, left: dot.left }}>
                     <div className="w-2 h-2 rounded-full animate-pulse-glow" style={{ background: dot.color }} />
                     <span className="font-mono text-[0.5rem]" style={{ color: dot.color }}>{dot.label}</span>
@@ -105,97 +90,62 @@ export function Contact() {
 
           {/* Right: Form */}
           <AnimateIn delay={0.15} direction="left">
-            <div
-              className="rounded-2xl overflow-hidden"
-              style={{
-                background: "rgba(20,20,20,0.8)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.06)",
-              }}
-            >
-              {/* Form header bar */}
+            <div className="rounded-2xl overflow-hidden"
+              style={{ background: "rgba(20,20,20,0.8)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.06)" }}>
               <BrandBarFull height={3} />
               <div className="p-8 lg:p-10">
-                <h3 className="text-lg font-bold text-white mb-8">Request a Quote</h3>
+                <h3 className="text-lg font-bold text-white mb-8">{t.contact.formTitle}</h3>
 
                 {sent ? (
-                  <motion.div
-                    className="flex flex-col items-center gap-4 py-12 text-center"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                  >
-                    <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "rgba(45,79,163,0.2)", border: "1px solid #2D4FA3" }}>
+                  <motion.div className="flex flex-col items-center gap-4 py-12 text-center"
+                    initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center"
+                      style={{ background: "rgba(45,79,163,0.2)", border: "1px solid #2D4FA3" }}>
                       <Send size={20} color="#2D4FA3" />
                     </div>
                     <div>
-                      <div className="font-bold text-white mb-1">Message sent</div>
-                      <div className="text-sm text-steel">Our team will respond within 24 hours.</div>
+                      <div className="font-bold text-white mb-1">{t.contact.sent}</div>
+                      <div className="text-sm text-steel">{t.contact.sentSub}</div>
                     </div>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="flex flex-col gap-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       <div>
-                        <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">Full Name</label>
-                        <input
-                          type="text"
-                          className={inputClass}
-                          placeholder="Your name"
-                          value={formData.name}
-                          onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                          required
-                        />
+                        <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">{t.contact.name}</label>
+                        <input type="text" className={inputClass} placeholder={t.contact.namePlaceholder}
+                          value={formData.name} onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))} required />
                       </div>
                       <div>
-                        <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">Company</label>
-                        <input
-                          type="text"
-                          className={inputClass}
-                          placeholder="Organization"
-                          value={formData.company}
-                          onChange={(e) => setFormData((p) => ({ ...p, company: e.target.value }))}
-                        />
+                        <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">{t.contact.company}</label>
+                        <input type="text" className={inputClass} placeholder={t.contact.companyPlaceholder}
+                          value={formData.company} onChange={(e) => setFormData((p) => ({ ...p, company: e.target.value }))} />
                       </div>
                     </div>
 
                     <div>
-                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">Email</label>
-                      <input
-                        type="email"
-                        className={inputClass}
-                        placeholder="you@company.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-                        required
-                      />
+                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">{t.contact.email}</label>
+                      <input type="email" className={inputClass} placeholder={t.contact.emailPlaceholder}
+                        value={formData.email} onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))} required />
                     </div>
 
                     <div>
-                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">Project Type</label>
-                      <select
-                        className={`${inputClass} bg-surface/60 rounded-t-lg`}
-                        value={formData.type}
-                        onChange={(e) => setFormData((p) => ({ ...p, type: e.target.value }))}
-                      >
-                        <option value="">Select project type...</option>
-                        {PROJECT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">{t.contact.projectType}</label>
+                      <select className={`${inputClass} bg-surface/60 rounded-t-lg`}
+                        value={formData.type} onChange={(e) => setFormData((p) => ({ ...p, type: e.target.value }))}>
+                        <option value="">{t.contact.projectTypePlaceholder}</option>
+                        {t.contact.projectTypes.map((type) => <option key={type} value={type}>{type}</option>)}
                       </select>
                     </div>
 
                     <div>
-                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">Project Details</label>
-                      <textarea
-                        className={`${inputClass} resize-none`}
-                        rows={4}
-                        placeholder="Describe your project requirements, area (m²), panel system needed..."
-                        value={formData.message}
-                        onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))}
-                        required
-                      />
+                      <label className="font-mono text-[0.6rem] uppercase tracking-widest text-muted block mb-2">{t.contact.details}</label>
+                      <textarea className={`${inputClass} resize-none`} rows={4} placeholder={t.contact.detailsPlaceholder}
+                        value={formData.message} onChange={(e) => setFormData((p) => ({ ...p, message: e.target.value }))} required />
                     </div>
 
                     <Button variant="gradient-border" size="lg" type="submit" className="w-full justify-center">
-                      <Send size={15} /> Request Quote
+                      <Send size={15} /> {t.contact.submit}
                     </Button>
                   </form>
                 )}
@@ -207,4 +157,3 @@ export function Contact() {
     </section>
   );
 }
-

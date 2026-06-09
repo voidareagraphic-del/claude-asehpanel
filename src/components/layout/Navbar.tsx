@@ -5,21 +5,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { BrandBarFull } from "@/components/ui/BrandBar";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const NAV_LINKS = [
-  { label: "Products",    href: "#products"      },
-  { label: "Technology",  href: "#technology"    },
-  { label: "Fire Shield", href: "#fire-shield"   },
-  { label: "Cold Storage",href: "#cold-storage"  },
-  { label: "Projects",    href: "#projects"      },
-  { label: "About",       href: "#about"         },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { lang, setLang, t } = useLanguage();
+
+  const NAV_LINKS = [
+    { label: t.nav.products,    href: "#products"      },
+    { label: t.nav.technology,  href: "#technology"    },
+    { label: t.nav.fireShield,  href: "#fire-shield"   },
+    { label: t.nav.coldStorage, href: "#cold-storage"  },
+    { label: t.nav.projects,    href: "#projects"      },
+    { label: t.nav.about,       href: "#about"         },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -29,7 +31,6 @@ export function Navbar() {
 
   return (
     <>
-      {/* 4-color brand bar at very top */}
       <BrandBarFull className="fixed top-0 left-0 right-0 z-[60]" height={3} />
 
       <motion.header
@@ -42,7 +43,6 @@ export function Navbar() {
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
       >
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12 h-[68px] flex items-center justify-between">
-          {/* Logo */}
           <a href="/" className="group flex-shrink-0">
             <Logo size="md" />
           </a>
@@ -60,16 +60,26 @@ export function Navbar() {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
+          {/* Desktop CTA + lang toggle */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Language toggle */}
+            <button
+              onClick={() => setLang(lang === "en" ? "fa" : "en")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/25 transition-colors duration-200 text-xs font-semibold text-steel hover:text-white"
+              aria-label="Toggle language"
+            >
+              <Languages size={13} />
+              <span>{lang === "en" ? "FA" : "EN"}</span>
+            </button>
+
             <a
               href="#contact"
               className="text-sm font-semibold text-steel hover:text-white transition-colors tracking-wide"
             >
-              Contact
+              {t.nav.contact}
             </a>
             <Button variant="gradient-border" size="sm" href="#contact">
-              Request Quote
+              {t.nav.requestQuote}
             </Button>
           </div>
 
@@ -109,9 +119,21 @@ export function Navbar() {
                 </motion.a>
               ))}
             </nav>
-            <div className="mt-10">
+
+            {/* Mobile lang toggle */}
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                onClick={() => setLang(lang === "en" ? "fa" : "en")}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/15 text-sm font-semibold text-steel hover:text-white transition-colors"
+              >
+                <Languages size={15} />
+                {lang === "en" ? "فارسی" : "English"}
+              </button>
+            </div>
+
+            <div className="mt-6">
               <Button variant="gradient-border" size="lg" href="#contact" className="w-full justify-center">
-                Request Quote
+                {t.nav.requestQuote}
               </Button>
             </div>
           </motion.div>
@@ -120,4 +142,3 @@ export function Navbar() {
     </>
   );
 }
-

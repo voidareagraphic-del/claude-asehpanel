@@ -11,15 +11,11 @@ import { BrandBar } from "@/components/ui/BrandBar";
 import { Button } from "@/components/ui/Button";
 import { EngBadgeRow } from "@/components/ui/EngBadge";
 import { ShieldCheck, Flame, Droplets, Wind, CheckCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-const FIRE_PROPERTIES = [
-  { icon: Flame,       label: "Does not melt",             detail: "Maintains structural integrity under extreme heat" },
-  { icon: Droplets,    label: "Does not drip",             detail: "Zero burning droplet formation — BS1D0 classified" },
-  { icon: ShieldCheck, label: "Self-extinguishing",        detail: "Immediately extinguishes when ignition source removed" },
-  { icon: Wind,        label: "Minimal smoke production",  detail: "Smoke density within EN 13501-1 permitted limits" },
-];
+const PROPERTY_ICONS = [Flame, Droplets, ShieldCheck, Wind];
 
 const CERTIFICATIONS = [
   { code: "EN 13501-1", scope: "Fire classification — non-load-bearing walls" },
@@ -32,6 +28,7 @@ const CERTIFICATIONS = [
 export function FireShield() {
   const sectionRef = useRef<HTMLElement>(null);
   const charLineRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!sectionRef.current || !charLineRef.current) return;
@@ -42,10 +39,7 @@ export function FireShield() {
         scaleX: 1,
         duration: 1.5,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-        },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 60%" },
       }
     );
   }, []);
@@ -54,13 +48,9 @@ export function FireShield() {
     <section id="fire-shield" ref={sectionRef} className="relative py-32 bg-[#0A0A0A] overflow-hidden">
       <div className="section-divider absolute top-0 left-0 right-0" />
 
-      {/* Subtle ember glow background */}
       <div
         className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none"
-        style={{
-          width: "50%", height: "70%",
-          background: "radial-gradient(ellipse at 80% 50%, rgba(180,60,20,0.04) 0%, transparent 60%)",
-        }}
+        style={{ width: "50%", height: "70%", background: "radial-gradient(ellipse at 80% 50%, rgba(180,60,20,0.04) 0%, transparent 60%)" }}
       />
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -69,29 +59,25 @@ export function FireShield() {
           {/* Left: Content */}
           <div>
             <AnimateIn delay={0}>
-              <SectionLabel text="Fire Shield Technology" accent="purple" className="mb-5" />
+              <SectionLabel text={t.fireShield.label} accent="purple" className="mb-5" />
               <BrandBar width="120px" height={3} className="mb-8" />
               <h2 className="text-display-xl font-black text-white leading-tight mb-6">
-                The panel that<br />
-                <span className="text-white/30">refuses to burn.</span>
+                {t.fireShield.headline1}<br />
+                <span className="text-white/30">{t.fireShield.headline2}</span>
               </h2>
-              <p className="text-base text-steel leading-relaxed mb-8 max-w-lg">
-                High Index PIR forms a dense carbonized char layer when exposed to extreme heat —
-                a structural barrier that stops flame propagation. The foam does not melt, does not
-                drip, and self-extinguishes the moment the ignition source is removed.
-              </p>
+              <p className="text-base text-steel leading-relaxed mb-8 max-w-lg">{t.fireShield.body}</p>
 
               {/* Char layer visual indicator */}
               <div className="mb-8 p-4 rounded-xl bg-surface/50 border border-white/[0.05]">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">Char layer formation</span>
+                  <span className="font-mono text-[0.6rem] uppercase tracking-widest text-muted">{t.fireShield.charLabel}</span>
                 </div>
                 <div className="flex gap-1 h-8 rounded-lg overflow-hidden" ref={charLineRef}>
-                  <div className="w-[12%] rounded-l bg-[#2A2A2A]" title="Steel facer" />
-                  <div className="w-[8%] bg-[#1A1009]" title="Char layer" />
-                  <div className="w-[60%] bg-gradient-to-r from-[#C47820] to-[#E89030]" title="PIR core — intact" />
-                  <div className="w-[8%] bg-[#1A1009]" title="Char layer" />
-                  <div className="w-[12%] rounded-r bg-[#2A2A2A]" title="Steel facer" />
+                  <div className="w-[12%] rounded-l bg-[#2A2A2A]" />
+                  <div className="w-[8%] bg-[#1A1009]" />
+                  <div className="w-[60%] bg-gradient-to-r from-[#C47820] to-[#E89030]" />
+                  <div className="w-[8%] bg-[#1A1009]" />
+                  <div className="w-[12%] rounded-r bg-[#2A2A2A]" />
                 </div>
                 <div className="flex justify-between mt-2 font-mono text-[0.55rem] text-muted">
                   <span>Steel facer</span>
@@ -104,16 +90,14 @@ export function FireShield() {
 
               {/* Fire properties */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
-                {FIRE_PROPERTIES.map((p) => {
-                  const Icon = p.icon;
+                {t.fireShield.properties.map((p, i) => {
+                  const Icon = PROPERTY_ICONS[i];
                   return (
                     <div
                       key={p.label}
                       className="flex gap-3 p-4 rounded-xl bg-surface/40 border border-white/[0.05] hover:border-[#8B5EA4]/30 transition-colors duration-300"
                     >
-                      <div className="mt-0.5 flex-shrink-0">
-                        <Icon size={16} color="#8B5EA4" />
-                      </div>
+                      <div className="mt-0.5 flex-shrink-0"><Icon size={16} color="#8B5EA4" /></div>
                       <div>
                         <div className="text-sm font-semibold text-white mb-0.5">{p.label}</div>
                         <div className="text-[0.72rem] text-muted leading-relaxed">{p.detail}</div>
@@ -124,12 +108,8 @@ export function FireShield() {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                <Button variant="solid-purple" size="md" href="#contact">
-                  Fire Performance Data
-                </Button>
-                <Button variant="ghost" size="md" href="#contact">
-                  Technical Datasheet
-                </Button>
+                <Button variant="solid-purple" size="md" href="#contact">{t.fireShield.cta1}</Button>
+                <Button variant="ghost" size="md" href="#contact">{t.fireShield.cta2}</Button>
               </div>
             </AnimateIn>
           </div>
@@ -148,16 +128,11 @@ export function FireShield() {
               <div className="rounded-2xl bg-panel border border-white/[0.05] p-7">
                 <div className="flex items-center gap-2 mb-6">
                   <ShieldCheck size={18} color="#8B5EA4" />
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Certification Standards
-                  </h3>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t.fireShield.certTitle}</h3>
                 </div>
                 <div className="flex flex-col gap-3">
                   {CERTIFICATIONS.map((cert) => (
-                    <div
-                      key={cert.code}
-                      className="flex items-center justify-between gap-4 py-3 border-b border-white/[0.04] last:border-0"
-                    >
+                    <div key={cert.code} className="flex items-center justify-between gap-4 py-3 border-b border-white/[0.04] last:border-0">
                       <div className="flex items-center gap-3">
                         <CheckCircle size={13} color="#8B5EA4" className="flex-shrink-0" />
                         <span className="font-mono text-sm font-bold text-white">{cert.code}</span>
@@ -174,22 +149,12 @@ export function FireShield() {
                 className="rounded-2xl p-7 relative overflow-hidden"
                 style={{ background: "linear-gradient(135deg, #1A1020 0%, #120D18 100%)", border: "1px solid rgba(139,94,164,0.2)" }}
               >
-                <div
-                  className="absolute top-0 right-0 w-32 h-32 pointer-events-none"
-                  style={{ background: "radial-gradient(ellipse at 80% 20%, rgba(139,94,164,0.15) 0%, transparent 70%)" }}
-                />
-                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted mb-2">
-                  Real fire test result
-                </div>
-                <div className="text-2xl font-black text-white mb-1">ASP Fire Shield PIR</div>
-                <div className="text-sm text-steel mb-6">When exposed to a real fire scenario:</div>
-                {[
-                  "Does not contribute as fuel source",
-                  "Emits minimum smoke",
-                  "Structural integrity preserved",
-                  "Insulation properties maintained",
-                  "Immediately self-extinguishes",
-                ].map((item) => (
+                <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none"
+                  style={{ background: "radial-gradient(ellipse at 80% 20%, rgba(139,94,164,0.15) 0%, transparent 70%)" }} />
+                <div className="font-mono text-[0.6rem] uppercase tracking-widest text-muted mb-2">Real fire test result</div>
+                <div className="text-2xl font-black text-white mb-1">{t.fireShield.resultTitle}</div>
+                <div className="text-sm text-steel mb-6">{t.fireShield.resultSub}</div>
+                {t.fireShield.results.map((item) => (
                   <div key={item} className="flex items-center gap-2.5 mb-2">
                     <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#8B5EA4" }} />
                     <span className="text-sm text-frost">{item}</span>
@@ -203,4 +168,3 @@ export function FireShield() {
     </section>
   );
 }
-

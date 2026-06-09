@@ -11,6 +11,7 @@ import { EngBadgeRow } from "@/components/ui/EngBadge";
 import { AsteriskMarkGhost } from "@/components/ui/AsteriskMark";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { EASING } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 const HERO_IMAGES = ["/images/H01.jpg", "/images/H02.jpg", "/images/H03.jpg"];
 
@@ -18,6 +19,7 @@ export function Hero() {
   const corridorRef = useRef<HTMLDivElement>(null);
   const lightRaysRef = useRef<HTMLDivElement[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -203,43 +205,37 @@ export function Hero() {
           <motion.div variants={item} className="flex items-center gap-3 mb-8">
             <BrandBar width="140px" height={3} />
             <span className="text-xs font-bold uppercase tracking-[0.22em] text-steel">
-              High Index PIR Technology
+              {t.hero.badge}
             </span>
           </motion.div>
 
           {/* Main headline */}
           <motion.h1 variants={item} className="font-black leading-[0.93] tracking-tight mb-8">
-            <span className="block text-display-2xl text-white">Engineering cold.</span>
-            <span className="block text-display-2xl text-white">Building</span>
-            <span className="block text-display-2xl text-white/30">the future.</span>
+            <span className="block text-display-2xl text-white">{t.hero.line1}</span>
+            <span className="block text-display-2xl text-white">{t.hero.line2}</span>
+            <span className="block text-display-2xl text-white/30">{t.hero.line3}</span>
           </motion.h1>
 
           {/* Accent line */}
           <motion.div variants={item}>
-            <div
-              className="mb-6"
-              style={{
-                width: 200, height: 1,
-                background: "linear-gradient(90deg, #A8CCE0, transparent)",
-              }}
-            />
+            <div className="mb-6" style={{ width: 200, height: 1, background: "linear-gradient(90deg, #A8CCE0, transparent)" }} />
           </motion.div>
 
           {/* Sub-copy */}
           <motion.p variants={item} className="text-base text-steel leading-relaxed mb-3 max-w-xl">
-            High Index PIR technology. 12 million m² annual capacity.
+            {t.hero.sub1}
           </motion.p>
           <motion.p variants={item} className="text-sm text-muted mb-10 max-w-xl">
-            Continuous Production Lines · Fully-automated smart manufacturing · Export-ready
+            {t.hero.sub2}
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={item} className="flex flex-wrap gap-4 mb-12">
             <Button variant="gradient-border" size="lg" href="#products">
-              Explore Products <ArrowRight size={16} />
+              {t.hero.cta1} <ArrowRight size={16} />
             </Button>
             <Button variant="ghost" size="lg" href="#technology">
-              Our Technology
+              {t.hero.cta2}
             </Button>
           </motion.div>
 
@@ -257,7 +253,7 @@ export function Hero() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.6, duration: 0.7, ease: EASING.cinematic }}
       >
-        <span className="font-mono text-[0.65rem] text-muted uppercase tracking-widest">Thermal</span>
+        <span className="font-mono text-[0.65rem] text-muted uppercase tracking-widest">{t.hero.thermalLabel}</span>
         <span className="font-mono text-sm font-bold text-frost">λD = 0.022 W/m·K</span>
       </motion.div>
 
@@ -269,7 +265,7 @@ export function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 0.6 }}
       >
-        <span className="text-[0.6rem] uppercase tracking-[0.25em] font-semibold">Scroll</span>
+        <span className="text-[0.6rem] uppercase tracking-[0.25em] font-semibold">{t.hero.scroll}</span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}

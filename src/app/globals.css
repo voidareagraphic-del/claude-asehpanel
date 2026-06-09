@@ -5,6 +5,7 @@
 :root {
   --font-inter: "Inter", system-ui, sans-serif;
   --font-jetbrains: "JetBrains Mono", monospace;
+  --font-vazirmatn: "Vazirmatn", system-ui, sans-serif;
   --brand-green:  #7AB648;
   --brand-blue:   #2D4FA3;
   --brand-purple: #8B5EA4;
@@ -102,6 +103,17 @@ body {
     letter-spacing: 0.08em;
     color: var(--steel);
   }
+}
+
+/* Persian / RTL support */
+[dir="rtl"] {
+  font-family: var(--font-vazirmatn), system-ui, sans-serif;
+}
+[dir="rtl"] .font-mono,
+[dir="rtl"] .eng-mono {
+  font-family: var(--font-jetbrains), monospace;
+  direction: ltr;
+  unicode-bidi: embed;
 }
 
 @layer utilities {
